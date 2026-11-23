@@ -1,0 +1,47 @@
+{% extends 'estoque/base.html' %}
+{% block title %}Produtos{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Produtos</h1>
+  {% if pode_editar %}
+    <a class="btn" href="{% url 'produto_create' %}">+ Novo produto</a>
+  {% endif %}
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th class="num">Qtd.</th>
+        <th class="num">Valor</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in produtos %}
+      <tr class="{% if p.abaixo_do_minimo %}baixo{% endif %}">
+        <td data-label="Produto"><strong>{{ p.nome }}</strong></td>
+        <td data-label="Categoria">{{ p.categoria }}</td>
+        <td data-label="Estoque" class="num">
+          {{ p.quantidade }}
+          {% if p.abaixo_do_minimo %}<span class="badge badge-baixo">Estoque baixo</span>{% endif %}
+        </td>
+        <td data-label="Valor" class="num">R$ {{ p.valor|floatformat:2 }}</td>
+        <td class="acoes">
+          <a class="btn btn-sec btn-sm" href="{% url 'movimentacao_list' %}?produto={{ p.pk }}">Histórico</a>
+          {% if pode_editar %}
+          <a class="btn btn-sec btn-sm" href="{% url 'produto_update' p.pk %}">Editar</a>
+          <a class="btn btn-perigo-sec btn-sm" href="{% url 'produto_delete' p.pk %}">Excluir</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="vazio">Nenhum produto cadastrado ainda.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

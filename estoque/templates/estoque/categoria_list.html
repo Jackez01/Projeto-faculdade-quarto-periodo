@@ -1,0 +1,39 @@
+{% extends 'estoque/base.html' %}
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Categorias</h1>
+  {% if pode_editar %}
+    <a class="btn" href="{% url 'categoria_create' %}">+ Nova categoria</a>
+  {% endif %}
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th class="num">Produtos</th>
+        {% if pode_editar %}<th></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in categorias %}
+      <tr>
+        <td data-label="Categoria"><strong>{{ c.nome }}</strong></td>
+        <td data-label="Produtos" class="num">{{ c.total_produtos }}</td>
+        {% if pode_editar %}
+        <td class="acoes">
+          <a class="btn btn-sec btn-sm" href="{% url 'categoria_update' c.pk %}">Editar</a>
+          <a class="btn btn-perigo-sec btn-sm" href="{% url 'categoria_delete' c.pk %}">Excluir</a>
+        </td>
+        {% endif %}
+      </tr>
+      {% empty %}
+      <tr><td colspan="3" class="vazio">Nenhuma categoria cadastrada ainda.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

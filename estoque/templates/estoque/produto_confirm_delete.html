@@ -1,0 +1,20 @@
+{% extends 'estoque/base.html' %}
+{% block title %}Excluir produto{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Excluir produto</h1>
+</div>
+
+<div class="card form-card">
+  <p>Tem certeza que deseja excluir <strong>{{ produto.nome }}</strong>?</p>
+  <p style="color: var(--tinta-suave);">Esta ação não pode ser desfeita.</p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-perigo">Sim, excluir</button>
+      <a class="btn btn-sec" href="{% url 'produto_list' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

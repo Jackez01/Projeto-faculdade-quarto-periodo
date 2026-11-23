@@ -1,0 +1,18 @@
+{% extends 'estoque/base.html' %}
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>{{ titulo }}</h1>
+</div>
+
+<form method="post" class="card form-card" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <p class="helptext">Não achou a categoria? <a href="{% url 'categoria_create' %}">Cadastre uma nova</a>.</p>
+  <div class="form-actions">
+    <button type="submit" class="btn">Salvar</button>
+    <a class="btn btn-sec" href="{% url 'produto_list' %}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

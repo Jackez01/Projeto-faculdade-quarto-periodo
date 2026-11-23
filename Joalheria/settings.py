@@ -62,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'estoque.context_processors.perfil',
             ],
         },
     },
@@ -126,3 +127,8 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'produto_list'
+LOGOUT_REDIRECT_URL = 'login'

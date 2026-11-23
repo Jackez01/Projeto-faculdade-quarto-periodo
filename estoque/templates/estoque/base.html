@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Estoque{% endblock %} · Joalheria</title>
+  <link rel="stylesheet" href="{% static 'estoque/style.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  {% if user.is_authenticated %}
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{% url 'produto_list' %}">Joalheria <span>·</span> Estoque</a>
+
+      <nav class="nav">
+        {% with nome=request.resolver_match.url_name %}
+        <a href="{% url 'produto_list' %}"
+           class="{% if nome == 'produto_list' or nome == 'produto_create' or nome == 'produto_update' or nome == 'produto_delete' %}active{% endif %}">Produtos</a>
+        <a href="{% url 'categoria_list' %}"
+           class="{% if nome == 'categoria_list' or nome == 'categoria_create' or nome == 'categoria_update' or nome == 'categoria_delete' %}active{% endif %}">Categorias</a>
+        <a href="{% url 'movimentacao_list' %}"
+           class="{% if nome == 'movimentacao_list' or nome == 'movimentacao_create' %}active{% endif %}">Movimentações</a>
+        {% if eh_proprietario %}
+        <a href="{% url 'usuario_list' %}"
+           class="{% if nome == 'usuario_list' or nome == 'usuario_create' or nome == 'usuario_update' or nome == 'usuario_password' %}active{% endif %}">Usuários</a>
+        {% endif %}
+        {% endwith %}
+      </nav>
+
+      <div class="user-area">
+        <span>{{ user.get_username }}</span>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">Sair</button>
+        </form>
+      </div>
+    </div>
+  </header>
+  {% endif %}
+
+  {% block body %}
+  <main class="container">
+    {% for m in messages %}
+      <div class="msg {{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% extends 'estoque/base.html' %}
+{% block title %}Entrar{% endblock %}
+{% block body_class %}auth{% endblock %}
+
+{% block body %}
+<div class="card auth-card">
+  <div class="brand-grande">Joalheria</div>
+  <p class="sub">Entre para consultar e atualizar o estoque.</p>
+
+  <form method="post" class="form-card" style="max-width: none; padding: 0; border: 0;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Entrar</button>
+  </form>
+</div>
+{% endblock %}

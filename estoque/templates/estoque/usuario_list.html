@@ -1,0 +1,46 @@
+{% extends 'estoque/base.html' %}
+{% block title %}Usuários{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Usuários</h1>
+  <a class="btn" href="{% url 'usuario_create' %}">+ Novo usuário</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Usuário</th>
+        <th>Perfil</th>
+        <th>Situação</th>
+        <th class="num">Movim.</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in usuarios %}
+      <tr>
+        <td data-label="Nome"><strong>{{ u.first_name|default:u.username }}</strong></td>
+        <td data-label="Usuário">{{ u.username }}</td>
+        <td data-label="Perfil">
+          <span class="badge {% if u.perfil == 'Proprietário' %}badge-prop{% else %}badge-vend{% endif %}">{{ u.perfil }}</span>
+        </td>
+        <td data-label="Situação">
+          <span class="badge {% if u.is_active %}badge-ativo{% else %}badge-inativo{% endif %}">{% if u.is_active %}Ativo{% else %}Inativo{% endif %}</span>
+        </td>
+        <td data-label="Movimentações" class="num">{{ u.total_mov }}</td>
+        <td class="acoes">
+          <a class="btn btn-sec btn-sm" href="{% url 'movimentacao_list' %}?usuario={{ u.pk }}">Histórico</a>
+          <a class="btn btn-sec btn-sm" href="{% url 'usuario_update' u.pk %}">Editar</a>
+          <a class="btn btn-sec btn-sm" href="{% url 'usuario_password' u.pk %}">Senha</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="vazio">Nenhum usuário.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'estoque/base.html' %}
+{% block title %}Histórico de movimentações{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Histórico de movimentações</h1>
+  <a class="btn" href="{% url 'movimentacao_create' %}">+ Registrar movimentação</a>
+</div>
+
+<form method="get" class="card filtros">
+  <div class="campo">
+    <label for="{{ filtro.produto.id_for_label }}">Produto</label>
+    {{ filtro.produto }}
+  </div>
+  <div class="campo">
+    <label for="{{ filtro.tipo.id_for_label }}">Tipo</label>
+    {{ filtro.tipo }}
+  </div>
+  <div class="campo">
+    <label for="{{ filtro.usuario.id_for_label }}">Usuário</label>
+    {{ filtro.usuario }}
+  </div>
+  <div class="campo">
+    <label for="{{ filtro.data_inicio.id_for_label }}">De</label>
+    {{ filtro.data_inicio }}
+  </div>
+  <div class="campo">
+    <label for="{{ filtro.data_fim.id_for_label }}">Até</label>
+    {{ filtro.data_fim }}
+  </div>
+  <div class="filtros-acoes">
+    <button type="submit" class="btn btn-sm">Filtrar</button>
+    <a class="btn btn-sec btn-sm" href="{% url 'movimentacao_list' %}">Limpar</a>
+  </div>
+</form>
+
+<p class="resumo">{{ total }} movimentaç{{ total|pluralize:"ão,ões" }} encontrada{{ total|pluralize }}</p>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Produto</th>
+        <th>Tipo</th>
+        <th class="num">Qtd.</th>
+        <th class="num">Valor unit.</th>
+        <th class="num">Total</th>
+        <th>Usuário</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in page %}
+      <tr>
+        <td data-label="Data">{{ m.data|date:"d/m/Y H:i" }}</td>
+        <td data-label="Produto"><strong>{{ m.produto.nome }}</strong></td>
+        <td data-label="Tipo">
+          <span class="badge badge-{{ m.tipo }}">{{ m.get_tipo_display }}</span>
+        </td>
+        <td data-label="Quantidade" class="num">{{ m.quantidade }}</td>
+        <td data-label="Valor unit." class="num">R$ {{ m.valor_unitario|floatformat:2 }}</td>
+        <td data-label="Total" class="num">R$ {{ m.valor_total|floatformat:2 }}</td>
+        <td data-label="Usuário">{{ m.usuario.get_username }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" class="vazio">Nenhuma movimentação encontrada.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if page.has_other_pages %}
+<nav class="paginacao">
+  {% if page.has_previous %}
+    <a class="btn btn-sec btn-sm" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page.previous_page_number }}">← Anterior</a>
+  {% endif %}
+  <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}
+    <a class="btn btn-sec btn-sm" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page.next_page_number }}">Próxima →</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}
